@@ -1,5 +1,6 @@
 package com.weather.tests;
 
+import com.weather.client.WeatherApiClient;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.BeforeAll;
@@ -7,30 +8,15 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class WeatherApiTest {
-    private static final String API_KEY = System.getenv("WEATHER_API_KEY");
-    private static final String BASE_URL = "https://api.weatherbit.io/v2.0";
-
-    @BeforeAll
-    public static void setup() {
-        RestAssured.baseURI = BASE_URL;
-
-        if (API_KEY == null) {
-            throw new RuntimeException("WEATHER_API_KEY environment variable is not set.");
-        }
-    }
+public class WeatherCurrentApiTest {
+    private final WeatherApiClient client = new WeatherApiClient();
 
     @Test
     public void shouldRetrieveWeatherForMultipleMajorCities() {
         String[] cities = {"Sydney", "City of London", "New York City", "Tokyo"};
 
         for (String city: cities) {
-            Response response = RestAssured
-                    .given()
-                    .queryParam("city", city)
-                    .queryParam("key", API_KEY)
-                    .when()
-                    .get("/current");
+            Response response = client.getCurrentWeather(city);
 
             assertEquals(200, response.getStatusCode(),
                     "Status code mismatch for city: " + city);

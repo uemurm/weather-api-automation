@@ -21,6 +21,9 @@ jobs:
           java-version: "17"
           cache: maven
 
+      - name: Make mvnw executable
+        run: chmod +x mvnw
+
       - name: Run tests
         env:
           WEATHER_API_KEY: ${{ secrets.WEATHER_API_KEY }}

@@ -1,18 +1,16 @@
 package com.weather.tests;
 
 import com.weather.service.WeatherService;
-import org.junit.jupiter.api.Tag;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 public class WeatherAnalyticsTest {
     @Test
-    @Tag("integration")
-    void shouldIdentifyWarmestAustralianCapital() {
+    public void shouldIdentifyWarmestAustralianCapital() {
 
         List<String> capitals = List.of(
                 "Sydney",

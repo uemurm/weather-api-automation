@@ -1,12 +1,10 @@
 package com.weather.tests;
 
 import com.weather.client.WeatherApiClient;
-import io.restassured.RestAssured;
 import io.restassured.response.Response;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.Assert.*;
 
 public class WeatherCurrentApiTest {
     private final WeatherApiClient client = new WeatherApiClient();
@@ -18,20 +16,16 @@ public class WeatherCurrentApiTest {
         for (String city: cities) {
             Response response = client.getCurrentWeather(city);
 
-            assertEquals(200, response.getStatusCode(),
-                    "Status code mismatch for city: " + city);
+            assertEquals("Status code mismatch for city: " + city, 200, response.getStatusCode());
 
             int dataSize = response.jsonPath().getList("data").size();
-            assertTrue(dataSize > 0,
-                    "No weather data returned for city: " + city);
+            assertTrue("No weather data returned for city: " + city, dataSize > 0);
 
             String returnedCity = response.jsonPath().getString("data[0].city_name");
-            assertEquals(city, returnedCity,
-                    "Returned city name mismatch for: " + city);
+            assertEquals("Returned city name mismatch for: " + city, city, returnedCity);
 
             Double temperature = response.jsonPath().getDouble("data[0].temp");
-            assertNotNull(temperature,
-                    "Temperature is null for city: " + city);
+            assertNotNull("Temperature is null for city: " + city, temperature);
 
             System.out.println(city + " temperature: " + temperature);
         }

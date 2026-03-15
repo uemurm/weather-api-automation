@@ -13,10 +13,10 @@ public class WarmestCapitalBDDTest {
     WeatherAnalyticsSteps weatherSteps;
 
     @Test
-    public void as_a_data_analyst_i_want_to_identify_the_warmest_australian_capital() {
+    public void asADataAnalystIWantToIdentifyTheWarmestAustralianCapital() {
 
-        weatherSteps.a_list_of_australian_capitals();
-        weatherSteps.the_temperature_data_is_retrieved();
-        weatherSteps.the_warmest_city_should_be_identified();
+        weatherSteps.aListOfAustralianCapitals();
+        weatherSteps.theTemperatureDataIsRetrieved();
+        weatherSteps.theWarmestCityShouldBeIdentified();
     }
 }

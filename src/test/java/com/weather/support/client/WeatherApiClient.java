@@ -1,4 +1,4 @@
-package com.weather.client;
+package com.weather.support.client;
 
 import io.restassured.RestAssured;
 import io.restassured.response.Response;

@@ -63,7 +63,9 @@ This project runs on GitHub Actions (ubuntu-latest):
 > Sydney, Melbourne, Brisbane, Perth, Adelaide, Canberra, Hobart, Darwin
 
 ## Roadmap / Future Improvements
+- Add WeatherConfig class for URL and API key.
 - Add AC2 tests (coordinates-based validation).
 - Add AC4 tests (read US states from a metadata input file and compute coldest state).
 - Externalise test data to src/test/resources (JSON/CSV) for data-driven tests.
 - Introduce retries for server errors to reduce flakiness.
+- Migrate to Open-Meteo (WeatherBit Business Trial Expires on 2026-04-03)

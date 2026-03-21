@@ -50,10 +50,15 @@ Serenity generates an HTML report after execution:
 - target/site/serenity/index.html
 
 ## CI
-This project runs on GitHub Actions (ubuntu-latest):
-- Executes: `./mvnw clean verify`
-- Uploads Serenity report directory as an artifact: `target/site/serenity/`
-- Requires `WEATHER_API_KEY` to be configured in GitHub Secrets
+This project uses GitHub Actions (ubuntu-latest):
+
+- Pull Requests: build only (no external API calls)
+  - Executes: `./mvnw -DskipTests package`
+
+- main branch: integration run + report
+  - Executes: `./mvnw clean verify`
+  - Uploads Serenity report as an artifact: `target/site/serenity/`
+  - Requires WEATHER_API_KEY in GitHub Secrets
 
 ## Test Design Notes
 - These tests call a real external API, so transient failures may occur (e.g., rate limits, 5xx).

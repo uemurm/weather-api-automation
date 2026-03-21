@@ -1,15 +1,21 @@
 name: API Tests (Serenity)
 
 on:
-  workflow_dispatch:
+  pull_request:
+    branches: [ "main" ]
   push:
     branches: [ "main" ]
-  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
-  test:
+  pr-build:
+    name: PR Build (no external API)
+    if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -24,12 +30,31 @@ jobs:
       - name: Make mvnw executable
         run: chmod +x mvnw
 
-      - name: Run tests
-        env:
-          WEATHER_API_KEY: ${{ secrets.WEATHER_API_KEY }}
-        run: |
-          ./mvnw --version
-          ./mvnw clean verify
+      - name: Build (skip tests)
+        run: ./mvnw --batch-mode -DskipTests package
+
+  main-integration:
+    name: Main Integration (external API + report)
+    if: github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    env:
+      WEATHER_API_KEY: ${{secrets.WEATHER_API_KEY}}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+          cache: maven
+
+      - name: Make mvnw executable
+        run: chmod +x mvnw
+
+      - name: Run integration tests
+        run: ./mvnw --batch-mode clean verify
 
       - name: Upload Serenity report
         if: always()

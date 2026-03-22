@@ -8,6 +8,7 @@ import org.junit.Test;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.within;
 
 public class WeatherCurrentApiTest {
     private final WeatherApiClient client = new WeatherApiClient();
@@ -36,5 +37,28 @@ public class WeatherCurrentApiTest {
             assertThat(lat).isBetween( -90.0,  90.0);
             assertThat(lon).isBetween(-180.0, 180.0);
         }
+    }
+
+    @Test
+    public void shouldRetrieveWeatherForSpecificCoordinates() {
+        double latitude = -33.865143;
+        double longitude = 151.209900;
+        Response response = client.getCurrentWeather(latitude, longitude);
+
+        assertThat(response.getStatusCode()).isEqualTo(200);
+
+        JsonPath jpath = response.jsonPath();
+
+        int dataSize = jpath.getList("data").size();
+        assertThat(dataSize).isGreaterThan(0);
+
+        // Retrieved data may be missing temperature so use Double to make room for Null.
+        Double temperature = jpath.getDouble("data[0].temp");
+        assertThat(temperature).isNotNull();
+
+        Double lat = jpath.getDouble("data[0].lat");
+        Double lon = jpath.getDouble("data[0].lon");
+        assertThat(lat).isCloseTo( latitude, within(0.01));
+        assertThat(lon).isCloseTo(longitude, within(0.01));
     }
 }
